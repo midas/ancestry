@@ -14,7 +14,7 @@ module Ancestry
       # Check options
       raise AncestryException.new("Options for acts_as_tree must be in a hash.") unless options.is_a? Hash
       options.each do |key, value|
-        unless [:ancestry_column, :orphan_strategy, :cache_depth, :depth_cache_column].include? key
+        unless [:ancestry_column, :orphan_strategy, :cache_depth, :depth_cache_column, :guid].include? key
           raise AncestryException.new("Unknown option for acts_as_tree: #{key.inspect} => #{value.inspect}.")
         end
       end
@@ -36,7 +36,11 @@ module Ancestry
       # Save self as base class (for STI)
       self.cattr_accessor :base_class
       self.base_class = self
-      
+
+      # Create ids are guids accessor and set to option or default
+      self.cattr_accessor :ids_are_guids
+      self.ids_are_guids = options[:guid] || false
+            
       # Validate format of ancestry column value
       validates_format_of ancestry_column, :with => /\A[0-9]+(\/[0-9]+)*\Z/, :allow_nil => true
 
@@ -281,6 +285,7 @@ module Ancestry
 
     # Ancestors
     def ancestor_ids
+      return read_attribute(self.base_class.ancestry_column).to_s.split('/').map(&:to_s) if self.class.ids_are_guids
       read_attribute(self.base_class.ancestry_column).to_s.split('/').map(&:to_i)
     end
 
