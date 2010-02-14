@@ -415,6 +415,12 @@ module Ancestry
       subtree(depth_options).all(:select => self.base_class.primary_key).collect(&self.base_class.primary_key.to_sym)
     end
     
+    def add_child( node )
+      node.ancestry = self.child_ancestry
+      node.save!
+    end
+    
+    
     # Callback disabling
     def without_ancestry_callbacks
       @disable_ancestry_callbacks = true
