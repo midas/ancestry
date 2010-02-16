@@ -42,7 +42,7 @@ module Ancestry
       self.ids_are_guids = options[:guid] || false
             
       # Validate format of ancestry column value
-      validates_format_of ancestry_column, :with => /\A[0-9]+(\/[0-9]+)*\Z/, :allow_nil => true
+      validates_format_of ancestry_column, :with => /\A[0-9]+(\/[0-9]+)*\Z/, :allow_nil => true, :unless => :ids_are_guids
 
       # Validate that the ancestor ids don't include own id
       validate :ancestry_exclude_self
