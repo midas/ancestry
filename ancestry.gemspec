@@ -1,5 +1,3 @@
-require 'rake'
-
 Gem::Specification.new do |s|
   s.name        = 'midas-ancestry'
   s.description = 'Organise ActiveRecord model into a tree structure'
@@ -12,7 +10,13 @@ Gem::Specification.new do |s|
   s.email    = 's.a.kroes@gmail.com'
   s.homepage = 'http://github.com/stefankroes/ancestry'
 
-  s.files = FileList['ancestry.gemspec', '*.rb', 'lib/**/*.rb', 'test/*', 'Rakefile', 'MIT-LICENSE', 'README.rdoc']
+  s.files = Dir['*.rb']          +
+            Dir['lib/**/*.rb']   +
+            Dir['test/*']        +
+            %w(ancestry.gemspec
+               Rakefile
+               MIT-LICENSE
+               README.rdoc)
   
   s.add_dependency 'activerecord', '>= 2.1.0'
 end
